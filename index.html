@@ -85,7 +85,7 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
 .group h3{font-family:'Fraunces',serif;font-size:17px;margin:0 0 10px;color:var(--gold);font-weight:600}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .option{font-family:inherit;background:rgba(255,255,255,.06);border:1.5px solid var(--brd);border-radius:16px;padding:14px 10px;color:var(--cream);cursor:pointer;font-size:14.5px;font-weight:700;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:6px}
-.option .emoji{font-size:26px}
+.option{text-align:center;line-height:1.3}.option small{font-size:12px;opacity:.75;font-weight:600}.option .emoji{font-size:26px}
 .option:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
 .option.selected{background:linear-gradient(135deg,var(--coral),var(--rose));border-color:transparent;color:#fff;box-shadow:0 8px 20px rgba(255,90,100,.35);transform:translateY(-2px) scale(1.02)}
 .date-input,.time-input{font-family:inherit;background:rgba(255,255,255,.08);border:1.5px solid var(--brd);border-radius:14px;padding:13px 15px;color:var(--cream);font-size:16px;font-weight:700;color-scheme:dark;width:100%;max-width:260px}
@@ -140,12 +140,12 @@ button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
   <h1>What are we <em>eating?</em></h1>
   <p class="sub">One flavor. Choose wisely (or let me surprise you).</p>
   <div class="grid" id="foodGrid">
-    <button class="option" data-value="Italian"><span class="emoji">🍝</span>Italian</button>
-    <button class="option" data-value="Burgers"><span class="emoji">🍔</span>Burgers</button>
-    <button class="option" data-value="Sushi"><span class="emoji">🍣</span>Sushi</button>
-    <button class="option" data-value="Tacos"><span class="emoji">🌮</span>Tacos</button>
-    <button class="option" data-value="Pizza"><span class="emoji">🍕</span>Pizza</button>
-    <button class="option" data-value="Surprise me"><span class="emoji">✨</span>Surprise me</button>
+    <button class="option" data-value="Healthy food"><span class="emoji">🥗</span>Healthy food</button>
+    <button class="option" data-value="Shawarma mix (rez or saj)"><span class="emoji">🌯</span>Shawarma mix<br><small>rez or saj</small></button>
+    <button class="option" data-value="Seven Burgers meal"><span class="emoji">🍔</span>Seven Burgers meal</button>
+    <button class="option" data-value="Steak plate"><span class="emoji">🥩</span>Steak plate</button>
+    <button class="option" data-value="Baked potatoes"><span class="emoji">🥔</span>Baked potatoes</button>
+    <button class="option" data-value="Beef or chicken healthy plate"><span class="emoji">🍗</span>Beef or chicken healthy plate</button>
   </div>
 </section>
 
@@ -273,7 +273,7 @@ function renderAfter(){
   const on=picks.includes(o.dataset.k);
   o.classList.toggle('sel',on); o.setAttribute('aria-pressed',on)});
  document.querySelectorAll('#counter .dots i').forEach((d,i)=>d.classList.toggle('on',i<picks.length));
- $('counterTxt').textContent=picks.length===1?'1 of 1  perfect ✨':'0 of 1 chosen';
+ $('counterTxt').textContent=picks.length===1?'1 of 1 — perfect ✨':'0 of 1 chosen';
  $('note').classList.toggle('show',picks.includes('cocktail')||picks.includes('juice'));
  const go=$('afterGo'); go.disabled=picks.length!==1;
  go.textContent=picks.length===1?'That\'s my pick →':'Choose 1 to continue';
