@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>a question for you 💌</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,600;1,9..144,500&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--plum:#2a1b3d;--plum2:#4a2b52;--coral:#ff7a6b;--rose:#ff5d80;--gold:#ffc857;--cream:#fff3e6;--glass:rgba(255,255,255,.08);--brd:rgba(255,255,255,.16);
+box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+html,body{margin:0;min-height:100%;font-family:'Quicksand',system-ui,sans-serif;color:var(--cream);overflow-x:hidden;
+background:radial-gradient(circle at 20% 15%,rgba(255,122,107,.2),transparent 45%),radial-gradient(circle at 85% 80%,rgba(255,200,87,.14),transparent 50%),linear-gradient(160deg,var(--plum),var(--plum2) 60%,#3a2148) fixed #2a1b3d}
+.app{position:relative;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px}
+.ambient{position:fixed;inset:0;pointer-events:none;overflow:hidden;z-index:0}
+.heart{position:absolute;bottom:-40px;opacity:.35;animation:up linear infinite}
+@keyframes up{0%{transform:translateY(0) rotate(0);opacity:0}10%{opacity:.5}100%{transform:translateY(-110vh) translateX(20px) rotate(25deg);opacity:0}}
+.stage{position:relative;z-index:2;width:100%;max-width:540px}
+.screen{display:none;background:var(--glass);border:1px solid var(--brd);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-radius:30px;padding:clamp(22px,6vw,44px);text-align:center;box-shadow:0 20px 60px rgba(0,0,0,.35);position:relative}
+.screen.active{display:block;animation:in .5s cubic-bezier(.2,.9,.25,1)}
+.screen.leaving{display:block;animation:out .22s ease forwards}
+@keyframes in{from{opacity:0;transform:translateY(18px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes out{to{opacity:0;transform:translateY(-10px) scale(.98)}}
+.eyebrow{font-size:14px;color:var(--gold);font-weight:700;margin-bottom:8px}
+h1{font-family:'Fraunces',serif;font-weight:600;font-size:clamp(28px,7vw,40px);margin:0 0 10px;line-height:1.15}
+h1 em{font-style:italic;font-weight:500;color:var(--coral)}
+p.sub{font-size:clamp(15px,3.6vw,17px);opacity:.85;margin:0 0 26px;line-height:1.5}
+.back{position:absolute;top:16px;left:18px;background:none;border:0;color:var(--cream);opacity:.6;font:600 14px 'Quicksand';cursor:pointer;padding:6px}
+.back:hover{opacity:1}
+.btn-row{position:relative;display:flex;gap:18px;justify-content:center;flex-wrap:wrap;min-height:130px;align-items:center}
+.btn,.btn-go{font-family:'Quicksand',sans-serif;font-size:18px;font-weight:700;padding:16px 38px;border-radius:999px;border:0;cursor:pointer;transition:transform .18s,box-shadow .18s,opacity .25s}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:3px}
+.btn-yes,.btn-go{background:linear-gradient(135deg,var(--coral),var(--rose));color:#fff;box-shadow:0 10px 25px rgba(255,90,100,.4)}
+.btn-yes:hover,.btn-go:hover:not(:disabled){transform:translateY(-3px) scale(1.04)}
+.btn-no{background:rgba(255,255,255,.12);color:var(--cream);border:1px solid var(--brd);position:absolute}
+.btn-no.static{position:static}
+.btn-go{font-size:16px;padding:14px 32px;margin-top:6px}
+.btn-go:disabled{opacity:.35;cursor:not-allowed;box-shadow:none}
+.character{font-size:84px;animation:pop .9s cubic-bezier(.34,1.56,.64,1) both;display:inline-block}
+@keyframes pop{0%{transform:scale(0) translateY(40px);opacity:0}60%{transform:scale(1.15) translateY(-6px);opacity:1}100%{transform:none}}
+.box{font-size:60px;display:inline-block;animation:wig 1.4s ease-in-out .9s both}
+@keyframes wig{20%{transform:rotate(-8deg)}40%{transform:rotate(7deg)}60%{transform:rotate(-4deg)}80%{transform:rotate(3deg)}}
+.confetti{position:fixed;top:-10px;z-index:5;pointer-events:none;width:10px;height:14px;border-radius:2px}
+@keyframes fall{to{transform:translateY(110vh) rotate(540deg);opacity:.2}}
+
+/* activity cards */
+.cards{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.card{position:relative;overflow:hidden;font-family:inherit;color:var(--cream);text-align:center;cursor:pointer;background:rgba(255,255,255,.06);border:1.5px solid var(--brd);border-radius:24px;padding:22px 12px 18px;transition:transform .25s cubic-bezier(.3,1.4,.5,1),border-color .2s,background .2s,box-shadow .25s}
+.card.wide{grid-column:1/-1;display:flex;align-items:center;gap:18px;text-align:left;padding:20px 22px}
+.card .ico{display:block;font-size:48px;line-height:1;margin-bottom:10px;transition:transform .35s cubic-bezier(.3,1.6,.5,1)}
+.card.wide .ico{font-size:56px;margin:0}
+.card b{display:block;font-family:'Fraunces',serif;font-size:20px;font-weight:600}
+.card small{display:block;font-size:13px;opacity:.75;margin-top:3px;font-weight:600}
+.card::after{content:"";position:absolute;inset:0;background:radial-gradient(circle at 50% 0,rgba(255,200,87,.25),transparent 65%);opacity:0;transition:opacity .3s}
+.card:hover{transform:translateY(-5px);border-color:rgba(255,200,87,.6);box-shadow:0 14px 30px rgba(0,0,0,.3)}
+.card:hover::after{opacity:1}
+.card:hover .ico{transform:scale(1.18) rotate(-8deg)}
+.card:active{transform:scale(.97)}
+
+/* pick 2 */
+.counter{display:inline-flex;align-items:center;gap:10px;background:rgba(255,200,87,.12);border:1px solid rgba(255,200,87,.35);color:var(--gold);padding:8px 16px;border-radius:999px;font-weight:700;font-size:14px;margin-bottom:18px}
+.dots{display:flex;gap:6px}
+.dots i{width:12px;height:12px;border-radius:50%;border:2px solid var(--gold);transition:all .25s}
+.dots i.on{background:var(--gold);transform:scale(1.2)}
+.counter.shake{animation:shake .4s}
+@keyframes shake{25%{transform:translateX(-6px)}50%{transform:translateX(6px)}75%{transform:translateX(-3px)}}
+.opts{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-bottom:14px}
+.opt{position:relative;font-family:inherit;color:var(--cream);cursor:pointer;background:rgba(255,255,255,.06);border:1.5px solid var(--brd);border-radius:20px;padding:18px 8px 14px;transition:all .22s;text-align:center}
+.opt .ico{display:block;font-size:36px;margin-bottom:6px}
+.opt b{display:block;font-size:15px}
+.opt small{font-size:12px;opacity:.7;font-weight:600}
+.opt:hover{transform:translateY(-3px);border-color:rgba(255,255,255,.35)}
+.opt.sel{background:linear-gradient(135deg,var(--coral),var(--rose));border-color:transparent;color:#fff;box-shadow:0 10px 24px rgba(255,90,100,.4);transform:translateY(-3px) scale(1.03)}
+.opt.sel .ico{animation:pop .5s cubic-bezier(.34,1.56,.64,1)}
+.opt.sel::after{content:"✓";position:absolute;top:8px;right:10px;width:22px;height:22px;border-radius:50%;background:#fff;color:var(--rose);font-weight:700;font-size:13px;line-height:22px}
+.opt:last-child:nth-child(odd){grid-column:1/-1}
+.note{max-height:0;overflow:hidden;opacity:0;transition:all .4s ease;margin-bottom:0}
+.note.show{max-height:140px;opacity:1;margin-bottom:14px}
+.note div{background:rgba(255,200,87,.12);border:1px dashed rgba(255,200,87,.5);border-radius:16px;padding:12px 16px;font-size:14.5px;line-height:1.55;font-weight:600;color:var(--gold)}
+
+/* when + summary (existing picker) */
+.group{margin-bottom:24px;text-align:left}
+.group h3{font-family:'Fraunces',serif;font-size:17px;margin:0 0 10px;color:var(--gold);font-weight:600}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.option{font-family:inherit;background:rgba(255,255,255,.06);border:1.5px solid var(--brd);border-radius:16px;padding:14px 10px;color:var(--cream);cursor:pointer;font-size:14.5px;font-weight:700;transition:all .18s;display:flex;flex-direction:column;align-items:center;gap:6px}
+.option .emoji{font-size:26px}
+.option:hover{transform:translateY(-2px);border-color:rgba(255,255,255,.3)}
+.option.selected{background:linear-gradient(135deg,var(--coral),var(--rose));border-color:transparent;color:#fff;box-shadow:0 8px 20px rgba(255,90,100,.35);transform:translateY(-2px) scale(1.02)}
+.date-input,.time-input{font-family:inherit;background:rgba(255,255,255,.08);border:1.5px solid var(--brd);border-radius:14px;padding:13px 15px;color:var(--cream);font-size:16px;font-weight:700;color-scheme:dark;width:100%;max-width:260px}
+.time-input{width:auto}
+.date-preview,.time-preview{font-size:14.5px;font-weight:700;color:var(--gold);min-height:20px;margin-top:8px}
+.time-row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.pills{display:flex;gap:8px;flex-wrap:wrap}
+.pill{font-family:inherit;font-weight:700;font-size:13px;background:rgba(255,255,255,.06);border:1.5px solid var(--brd);border-radius:999px;padding:9px 14px;color:var(--cream);cursor:pointer;transition:all .18s}
+.pill.selected{background:linear-gradient(135deg,var(--gold),#ffb347);color:#3a2148;border-color:transparent}
+.plan{background:rgba(255,255,255,.07);border:1px solid var(--brd);border-radius:20px;padding:18px 20px;margin:18px 0 22px;font-size:19px;font-weight:700;line-height:1.5}
+.plan .ar{color:var(--coral);margin:0 4px}
+.summary-card{background:rgba(255,255,255,.07);border:1px solid var(--brd);border-radius:20px;padding:22px;margin:18px 0 24px;font-size:17px;line-height:1.7}
+.summary-card b{color:var(--gold)}
+.toast{position:fixed;bottom:28px;left:50%;transform:translateX(-50%) translateY(20px);background:var(--gold);color:#3a2148;font-weight:700;padding:12px 22px;border-radius:999px;font-size:14px;opacity:0;transition:all .3s;z-index:20}
+.toast.show{opacity:1;transform:translateX(-50%)}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}}
+</style>
+</head>
+<body>
+<div class="ambient" id="ambient"></div>
+<div class="app"><div class="stage">
+
+<section class="screen active" id="screen-ask">
+  <div class="character" style="font-size:56px">💌</div>
+  <div class="eyebrow">a small question</div>
+  <h1>Will you go out <em>with me?</em> 🌇</h1>
+  <p class="sub">No pressure. Well... a little pressure. One of these buttons is easier to click than the other. 😉</p>
+  <div class="btn-row" id="btnRow">
+    <button class="btn btn-yes" id="yesBtn">Yes 💕</button>
+    <button class="btn btn-no static" id="noBtn">No</button>
+  </div>
+</section>
+
+<section class="screen" id="screen-yes">
+  <div class="eyebrow">excellent choice</div>
+  <div><div class="character">🥳</div></div>
+  <h1>Yesss! Let's plan it 🎉</h1>
+  <p class="sub">I brought options. Literally.</p>
+  <span class="box">📦</span>
+</section>
+
+<section class="screen" id="screen-activity">
+  <div class="eyebrow">your call</div>
+  <h1>What kind of date <em>are you in the mood for?</em></h1>
+  <p class="sub">Tap the one that sounds like you today.</p>
+  <div class="cards" id="activityCards"></div>
+</section>
+
+<section class="screen" id="screen-food">
+  <button class="back" data-back="screen-activity">← back</button>
+  <div class="eyebrow">🍝 dinner it is</div>
+  <h1>What are we <em>eating?</em></h1>
+  <p class="sub">One flavor. Choose wisely (or let me surprise you).</p>
+  <div class="grid" id="foodGrid">
+    <button class="option" data-value="Italian"><span class="emoji">🍝</span>Italian</button>
+    <button class="option" data-value="Burgers"><span class="emoji">🍔</span>Burgers</button>
+    <button class="option" data-value="Sushi"><span class="emoji">🍣</span>Sushi</button>
+    <button class="option" data-value="Tacos"><span class="emoji">🌮</span>Tacos</button>
+    <button class="option" data-value="Pizza"><span class="emoji">🍕</span>Pizza</button>
+    <button class="option" data-value="Surprise me"><span class="emoji">✨</span>Surprise me</button>
+  </div>
+</section>
+
+<section class="screen" id="screen-after">
+  <button class="back" data-back="screen-activity">← back</button>
+  <div class="eyebrow" id="afterEyebrow"></div>
+  <h1>And afterwards… <em>pick 1</em></h1>
+  <p class="sub">Because we'll have earned it. Choose one.</p>
+  <div class="counter" id="counter"><span class="dots"><i></i></span><span id="counterTxt">0 of 1 chosen</span></div>
+  <div class="opts" id="opts"></div>
+  <div class="note" id="note"><div>No added sugar 😉<br>Bring your monk fruit if you want it sweeter…<br>or use your finger :)</div></div>
+  <button class="btn-go" id="afterGo" disabled>Choose 2 to continue</button>
+</section>
+
+<section class="screen" id="screen-confirm">
+  <div><div class="character">❤️</div></div>
+  <h1>Perfect. <em>It's a date</em> ❤️</h1>
+  <div class="plan" id="planText"></div>
+  <button class="btn-go" id="whenBtn">Okay, when are we doing this? 👀</button>
+</section>
+
+<section class="screen" id="screen-when">
+  <button class="back" data-back="screen-confirm">← back</button>
+  <div class="eyebrow">last bit</div>
+  <h1>Pick our <em>moment</em></h1>
+  <p class="sub" id="whenSub"></p>
+  <div class="group"><h3>Pick a day</h3>
+    <input type="date" id="dateInput" class="date-input"><div class="date-preview" id="datePreview"></div></div>
+  <div class="group"><h3>Pick a time</h3>
+    <div class="time-row"><input type="time" id="timeInput" class="time-input" value="19:00">
+      <div class="pills" id="marginGrid">
+        <button class="pill" data-value="0">Exact</button>
+        <button class="pill selected" data-value="15">± 15 min</button>
+        <button class="pill" data-value="30">± 30 min</button>
+        <button class="pill" data-value="60">± 1 hr</button></div></div>
+    <div class="time-preview" id="timePreview"></div></div>
+  <button class="btn-go" id="continueBtn">It's a date →</button>
+</section>
+
+<section class="screen" id="screen-summary">
+  <div class="eyebrow">all set</div>
+  <div><div class="character" style="font-size:64px">💌</div></div>
+  <h1>It's official!</h1>
+  <div class="summary-card" id="summaryText"></div>
+  <button class="btn-go" id="copyBtn">📋 Copy message to send</button>
+</section>
+
+</div></div>
+<div class="toast" id="toast">Copied! Go send it ✨</div>
+
+<script>
+const $=id=>document.getElementById(id), pad=n=>String(n).padStart(2,'0');
+// ambient hearts + sparkles
+const amb=$('ambient'), sym=['💛','💕','✨','🌙','❤️'];
+for(let i=0;i<14;i++){const e=document.createElement('div');e.className='heart';e.textContent=sym[i%sym.length];
+ e.style.cssText=`left:${Math.random()*100}%;animation-duration:${10+Math.random()*10}s;animation-delay:${Math.random()*10}s;font-size:${14+Math.random()*14}px`;amb.appendChild(e)}
+
+// screens, with a soft exit
+let current='screen-ask';
+function showScreen(id){
+  const from=$(current); current=id;
+  from.classList.remove('active'); from.classList.add('leaving');
+  setTimeout(()=>{from.classList.remove('leaving');$(id).classList.add('active');window.scrollTo(0,0)},200);
+}
+document.querySelectorAll('[data-back]').forEach(b=>b.onclick=()=>showScreen(b.dataset.back));
+function confetti(){
+  const c=['#ff7a6b','#ffc857','#ff5d80','#fff3e6','#ffb347'];
+  for(let i=0;i<60;i++){const d=document.createElement('div');d.className='confetti';
+   d.style.cssText=`left:${Math.random()*100}vw;background:${c[i%5]};animation:fall ${2+Math.random()*1.5}s ease-in ${Math.random()*.4}s forwards`;
+   document.body.appendChild(d);setTimeout(()=>d.remove(),4200)}
+}
+
+// dodging No (unchanged)
+const noBtn=$('noBtn'), btnRow=$('btnRow'); let dodges=0;
+function dodge(){dodges++;noBtn.classList.remove('static');
+ const r=btnRow.getBoundingClientRect();
+ noBtn.style.left=Math.random()*Math.max(r.width-noBtn.offsetWidth,10)+'px';
+ noBtn.style.top=Math.random()*Math.max(r.height-noBtn.offsetHeight,10)+'px';
+ noBtn.style.transform=`scale(${Math.max(.55,1-dodges*.05)})`;
+ const l=["No","Nope","Try again?","Nice try","Not quite","Almost!","So close","Come on now"];
+ noBtn.textContent=l[Math.min(dodges,l.length-1)]}
+noBtn.addEventListener('mouseenter',dodge);
+noBtn.addEventListener('click',e=>{e.preventDefault();dodge()});
+noBtn.addEventListener('touchstart',e=>{e.preventDefault();dodge()},{passive:false});
+$('yesBtn').onclick=()=>{showScreen('screen-yes');confetti();setTimeout(()=>showScreen('screen-activity'),2000)};
+
+// activities
+const ACT={
+ food:{e:'🍝',n:'Food',t:'Dinner, but make it us'},
+ padel:{e:'🎾',n:'Padel',t:'I\'ll go easy on you. Maybe.'},
+ football:{e:'⚽',n:'Football',t:'Penalties at sunset?'},
+ running:{e:'🏃‍♂️',n:'Running',t:'Easy pace, I promise'},
+ coffee:{e:'☕',n:'Coffee',t:'Low pressure, high charm'}};
+const AFTER={
+ juice:{e:'🧃',n:'Fresh Juice',t:'no added sugar'},
+ cocktail:{e:'🍹',n:'Fresh Cocktail',t:'no added sugar'},
+ coffee:{e:'☕',n:'Coffee',t:'the classic move'}};
+let activity=null, food=null, picks=[];
+
+$('activityCards').innerHTML=Object.entries(ACT).map(([k,a],i)=>
+ `<button class="card${i===0?' wide':''}" data-k="${k}"><span class="ico">${a.e}</span><span><b>${a.n}</b><small>${a.t}</small></span></button>`).join('');
+$('activityCards').onclick=e=>{
+ const c=e.target.closest('.card'); if(!c) return; activity=c.dataset.k;
+ if(activity==='food') showScreen('screen-food');
+ else if(activity==='padel'||activity==='football'){
+  picks=[];renderAfter();
+  $('afterEyebrow').textContent=ACT[activity].e+' '+ACT[activity].n.toLowerCase()+' first, then…';
+  showScreen('screen-after');
+ } else showConfirm();
+};
+
+// food (existing grid, now a step)
+$('foodGrid').onclick=e=>{
+ const b=e.target.closest('.option'); if(!b) return;
+ [...b.parentElement.children].forEach(c=>c.classList.remove('selected'));
+ b.classList.add('selected'); food=b.dataset.value;
+ setTimeout(showConfirm,350);
+};
+
+// pick exactly 2
+$('opts').innerHTML=Object.entries(AFTER).map(([k,a])=>
+ `<button class="opt" data-k="${k}"><span class="ico">${a.e}</span><b>${a.n}</b><small>${a.t}</small></button>`).join('');
+function renderAfter(){
+ document.querySelectorAll('#opts .opt').forEach(o=>{
+  const on=picks.includes(o.dataset.k);
+  o.classList.toggle('sel',on); o.setAttribute('aria-pressed',on)});
+ document.querySelectorAll('#counter .dots i').forEach((d,i)=>d.classList.toggle('on',i<picks.length));
+ $('counterTxt').textContent=picks.length===1?'1 of 1  perfect ✨':'0 of 1 chosen';
+ $('note').classList.toggle('show',picks.includes('cocktail')||picks.includes('juice'));
+ const go=$('afterGo'); go.disabled=picks.length!==1;
+ go.textContent=picks.length===1?'That\'s my pick →':'Choose 1 to continue';
+}
+$('opts').onclick=e=>{
+ const o=e.target.closest('.opt'); if(!o) return; const k=o.dataset.k;
+ picks=picks.includes(k)?[]:[k];
+ renderAfter();
+};
+$('afterGo').onclick=()=>{ if(picks.length===1) showConfirm(); };
+
+// confirmation
+function planString(){
+ if(activity==='food') return `Food → ${food||'Surprise me'}`;
+ if(activity==='padel'||activity==='football') return `${ACT[activity].n} → ${AFTER[picks[0]].n}`;
+ return ACT[activity].n;
+}
+function planHTML(){
+ const s=planString(), i=s.indexOf(' → ');
+ const emo=activity==='food'?ACT.food.e:ACT[activity].e;
+ return i<0?`${emo} ${s}`:`${emo} ${s.slice(0,i)}<span class="ar">→</span>${s.slice(i+3)}`;
+}
+function showConfirm(){
+ $('planText').innerHTML=planHTML();
+ showScreen('screen-confirm'); setTimeout(confetti,300);
+}
+$('whenBtn').onclick=()=>{ $('whenSub').textContent=planString().replace(' → ',', then ')+'. Now just tell me when.'; showScreen('screen-when'); };
+
+// day + time (existing logic)
+const dayN=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'], monN=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dateInput=$('dateInput'); let chosenDate=null, marginMin=15;
+dateInput.min=dateInput.value=iso(new Date());
+function updDate(){
+ if(!dateInput.value){$('datePreview').textContent='';chosenDate=null;return}
+ const [y,m,d]=dateInput.value.split('-').map(Number), p=new Date(y,m-1,d), t=new Date();t.setHours(0,0,0,0);
+ const diff=Math.round((p-t)/864e5), full=`${dayN[p.getDay()]}, ${monN[p.getMonth()]} ${p.getDate()}`;
+ const rel=diff===0?'Today':diff===1?'Tomorrow':(diff>1&&diff<7)?`In ${diff} days`:'';
+ $('datePreview').textContent=rel?`${rel} · ${full}`:full; chosenDate=full;
+}
+dateInput.oninput=updDate; updDate();
+const f12=(h,m)=>`${h%12||12}:${pad(m)} ${h>=12?'PM':'AM'}`;
+function updTime(){
+ const [h,m]=$('timeInput').value.split(':').map(Number), b=new Date();b.setHours(h,m,0,0);
+ if(!marginMin) $('timePreview').textContent=`Around ${f12(h,m)}`;
+ else{const s=new Date(b-marginMin*6e4),e=new Date(+b+marginMin*6e4);
+  $('timePreview').textContent=`Anytime between ${f12(s.getHours(),s.getMinutes())} – ${f12(e.getHours(),e.getMinutes())}`}
+}
+$('timeInput').oninput=updTime; updTime();
+$('marginGrid').onclick=e=>{const p=e.target.closest('.pill');if(!p)return;
+ [...p.parentElement.children].forEach(c=>c.classList.remove('selected'));p.classList.add('selected');marginMin=+p.dataset.value;updTime()};
+
+$('continueBtn').onclick=()=>{
+ if(!chosenDate){dateInput.focus();return}
+ $('summaryText').innerHTML=`I'd love to go out with you 💕<br><br><b>The plan:</b> ${planHTML()}<br><b>When:</b> ${chosenDate}<br><b>Time:</b> ${$('timePreview').textContent}<br><br>Can't wait!`;
+ showScreen('screen-summary'); setTimeout(confetti,300);
+};
+$('copyBtn').onclick=async()=>{
+ const msg=`I said yes! 💕 The plan: ${planString()}. ${chosenDate}, ${$('timePreview').textContent.toLowerCase()}. Can't wait!`;
+ try{await navigator.clipboard.writeText(msg)}catch(e){const t=document.createElement('textarea');t.value=msg;document.body.appendChild(t);t.select();document.execCommand('copy');t.remove()}
+ const t=$('toast');t.classList.add('show');setTimeout(()=>t.classList.remove('show'),2200);
+};
+</script>
+</body>
+</html>
